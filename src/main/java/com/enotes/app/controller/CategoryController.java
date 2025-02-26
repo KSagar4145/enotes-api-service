@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.enotes.app.dto.CategoryDto;
 import com.enotes.app.entity.Category;
+import com.enotes.app.entity.exceptionhandler.ResourceNotFoundException;
 import com.enotes.app.service.ICategoryService;
 
 @RestController
@@ -90,12 +91,13 @@ public class CategoryController {
 	
 	
 	@GetMapping("getCategoryById/{id}")
-	public ResponseEntity<?> getCategoeryById(@PathVariable Integer id){
+	//public ResponseEntity<?> getCategoeryById(@PathVariable Integer id)
+	//If I have used the try catch insted of the throws the GlobalExceptionHandler will not get called
+	public ResponseEntity<?> getCategoeryById(@PathVariable Integer id) throws ResourceNotFoundException{
 		CategoryDto catDto = categoryService.getCategoeryById(id);
 		return ObjectUtils.isEmpty(catDto) 
 				? ResponseEntity.status(HttpStatus.NOT_FOUND).body("No Category found for given Id")
 				: ResponseEntity.status(HttpStatus.OK).body(catDto);
-		
 	}
 	
 	

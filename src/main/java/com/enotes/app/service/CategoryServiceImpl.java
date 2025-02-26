@@ -1,11 +1,9 @@
 package com.enotes.app.service;
 
-import java.lang.foreign.Linker.Option;
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +12,7 @@ import org.springframework.util.ObjectUtils;
 
 import com.enotes.app.dto.CategoryDto;
 import com.enotes.app.entity.Category;
+import com.enotes.app.entity.exceptionhandler.ResourceNotFoundException;
 import com.enotes.app.repo.ICategoryRepo;
 
 @Service
@@ -67,10 +66,20 @@ public class CategoryServiceImpl implements ICategoryService{
 		return categoryRepo.findByIsActiveTrue();
 	}
 
+	
+//	@Override
+//	public CategoryDto getCategoeryById(Integer id) {
+//		Optional<Category> catById = categoryRepo.findByIdAndIsDeletedFalse(id);
+//		return catById.map(cat -> modelMapper.map(cat, CategoryDto.class)).orElse(null);
+//	}
+	
 	@Override
-	public CategoryDto getCategoeryById(Integer id) {
-		Optional<Category> catById = categoryRepo.findByIdAndIsDeletedFalse(id);
-		return catById.map(cat -> modelMapper.map(cat, CategoryDto.class)).orElse(null);
+	public CategoryDto getCategoeryById(Integer id) throws ResourceNotFoundException {
+			Category catById = categoryRepo.findByIdAndIsDeletedFalse(id).orElseThrow(() -> new ResourceNotFoundException("Category not found with id:"+id));
+		
+		return  modelMapper.map(catById, CategoryDto.class);
+		
+		
 	}
 
 	@Override
