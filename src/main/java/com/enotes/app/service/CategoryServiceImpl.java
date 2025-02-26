@@ -27,14 +27,33 @@ public class CategoryServiceImpl implements ICategoryService{
 	
 	@Override
 	public Boolean saveCatagory(Category category) {
-		//category.setActive(true);
-		category.setDeleted(false);
-		category.setCreatedBy(1);
-		category.setCreatedOn(new Date());
-		category.setUpdatedBy(null);
-		category.setUpdatedOn(null);
+		
+		if(ObjectUtils.isEmpty(category.getId())) {
+			//category.setActive(true);
+			category.setDeleted(false);
+			category.setCreatedBy(1);
+			category.setCreatedOn(new Date());
+			category.setUpdatedBy(null);
+			category.setUpdatedOn(null);
+		}else {
+			updateCategory(category);
+		}
+		
+		
+		
 		Category savedCategory = categoryRepo.save(category);
 		return ObjectUtils.isEmpty(savedCategory);		
+	}
+
+	private void updateCategory(Category category) {
+		Optional<Category> existingCatOpt = categoryRepo.findById(category.getId());
+		existingCatOpt.ifPresent((existingCat)->{
+		category.setCreatedBy(existingCat.getCreatedBy());
+		category.setCreatedOn(existingCat.getCreatedOn());
+		category.setUpdatedBy(1);
+		category.setUpdatedOn(new Date());
+		});
+		
 	}
 
 	@Override
