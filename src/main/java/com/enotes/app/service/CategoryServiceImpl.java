@@ -30,8 +30,8 @@ public class CategoryServiceImpl implements ICategoryService{
 		if(ObjectUtils.isEmpty(category.getId())) {
 			//category.setActive(true);
 			category.setDeleted(false);
-			category.setCreatedBy(1);
-			category.setCreatedOn(new Date());
+//			category.setCreatedBy(1);//commented cause we are using  auditing
+//			category.setCreatedOn(new Date());
 			category.setUpdatedBy(null);
 			category.setUpdatedOn(null);
 		}else {
@@ -47,10 +47,10 @@ public class CategoryServiceImpl implements ICategoryService{
 	private void updateCategory(Category category) {
 		Optional<Category> existingCatOpt = categoryRepo.findById(category.getId());
 		existingCatOpt.ifPresent((existingCat)->{
-		category.setCreatedBy(existingCat.getCreatedBy());
-		category.setCreatedOn(existingCat.getCreatedOn());
-		category.setUpdatedBy(1);
-		category.setUpdatedOn(new Date());
+//		category.setCreatedBy(existingCat.getCreatedBy());commented cause we are using  auditing
+//		category.setCreatedOn(existingCat.getCreatedOn());
+//		category.setUpdatedBy(1);
+//		category.setUpdatedOn(new Date());
 		});
 		
 	}
@@ -76,7 +76,6 @@ public class CategoryServiceImpl implements ICategoryService{
 	@Override
 	public CategoryDto getCategoeryById(Integer id) throws ResourceNotFoundException {
 			Category catById = categoryRepo.findByIdAndIsDeletedFalse(id).orElseThrow(() -> new ResourceNotFoundException("Category not found with id:"+id));
-		
 		return  modelMapper.map(catById, CategoryDto.class);
 		
 		

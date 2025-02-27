@@ -25,6 +25,8 @@ import com.enotes.app.entity.Category;
 import com.enotes.app.entity.exceptionhandler.ResourceNotFoundException;
 import com.enotes.app.service.ICategoryService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/v1/category")
 public class CategoryController {
@@ -37,7 +39,7 @@ public class CategoryController {
 
 	
 	@PostMapping("/save-category")
-	public ResponseEntity<?> saveCategory(@RequestBody Category category) {
+	public ResponseEntity<?> saveCategory(@Valid @RequestBody Category category) {
 		System.err.println("saveCategory Controller");
 		Boolean savedCategoryFlg = categoryService.saveCatagory(category);
 		return savedCategoryFlg ? ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Category Not Saved") 
