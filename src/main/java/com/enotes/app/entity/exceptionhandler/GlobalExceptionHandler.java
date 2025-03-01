@@ -12,6 +12,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import com.enotes.app.util.CommonUtil;
+
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -27,7 +29,8 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(ResourceNotFoundException.class)
 	public ResponseEntity<?> handleResourceNotFoundException(Exception e){
 		log.error("ResourceNotFoundException: "+ e.getMessage());
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+		//return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+		return CommonUtil.createErrorResponseMessage(HttpStatus.NOT_FOUND, e.getMessage());
 	}
 	
 	
@@ -44,14 +47,17 @@ public class GlobalExceptionHandler {
 					
 		});
 		
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errMap);
+		//return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errMap);
+		return CommonUtil.createErrorResponse(HttpStatus.BAD_REQUEST, errMap);
+		
 	}
 	
 	
 	@ExceptionHandler(ExistsDataException.class)
 	public ResponseEntity<?> handleExistsDataException(ExistsDataException e){
 		log.error("ExistsDataException: "+ e.getMessage());
-		return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+		//return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+		return CommonUtil.createErrorResponseMessage(HttpStatus.CONFLICT, e.getMessage());
 	}
 
 }
