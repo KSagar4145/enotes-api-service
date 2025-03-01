@@ -8,6 +8,7 @@ import java.util.function.Supplier;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
 import com.enotes.app.dto.CategoryDto;
@@ -17,6 +18,7 @@ import com.enotes.app.entity.exceptionhandler.ResourceNotFoundException;
 import com.enotes.app.repo.ICategoryRepo;
 
 @Service
+@Transactional
 public class CategoryServiceImpl implements ICategoryService{
 	
 	@Autowired
