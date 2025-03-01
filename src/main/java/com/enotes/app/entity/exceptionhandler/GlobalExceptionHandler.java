@@ -46,5 +46,12 @@ public class GlobalExceptionHandler {
 		
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errMap);
 	}
+	
+	
+	@ExceptionHandler(ExistsDataException.class)
+	public ResponseEntity<?> handleExistsDataException(ExistsDataException e){
+		log.error("ExistsDataException: "+ e.getMessage());
+		return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+	}
 
 }

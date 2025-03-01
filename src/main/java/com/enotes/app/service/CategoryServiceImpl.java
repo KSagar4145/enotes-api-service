@@ -12,6 +12,7 @@ import org.springframework.util.ObjectUtils;
 
 import com.enotes.app.dto.CategoryDto;
 import com.enotes.app.entity.Category;
+import com.enotes.app.entity.exceptionhandler.ExistsDataException;
 import com.enotes.app.entity.exceptionhandler.ResourceNotFoundException;
 import com.enotes.app.repo.ICategoryRepo;
 
@@ -26,8 +27,12 @@ public class CategoryServiceImpl implements ICategoryService{
 	
 	@Override
 	public Boolean saveCatagory(Category category) {
-		
 		if(ObjectUtils.isEmpty(category.getId())) {
+			Optional<Category> exists = categoryRepo.findByName(category.getName().trim());
+			if(exists.isPresent()) {
+				throw new ExistsDataException("Category with name: "+category.getName().trim() +" already exists");
+			}
+			
 			//category.setActive(true);
 			category.setDeleted(false);
 //			category.setCreatedBy(1);//commented cause we are using  auditing
