@@ -37,12 +37,24 @@ public class NotesDto {
 	
   	private Date updatedOn;
   	
+  	private FilesDto fileDetails;
+  	
   	@Data
   	@AllArgsConstructor
   	@NoArgsConstructor
   	public static class CategoryDto{
   		private Integer id;
   		private String name;
+  	}
+  	
+  	
+  	@Data
+  	@AllArgsConstructor
+  	@NoArgsConstructor
+  	public static class FilesDto{
+  		private Integer id;
+  		private String originalFileName;
+  		private String displayFileName;
   	}
 
 }

@@ -20,7 +20,6 @@ import lombok.NoArgsConstructor;
 @EntityListeners(AuditingEntityListener.class)
 public class Notes extends BaseModel{
 	
-	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "notes_seq")
 	@SequenceGenerator(name="notes_seq", sequenceName = "notes_seq", allocationSize = 1)
@@ -32,6 +31,9 @@ public class Notes extends BaseModel{
 	
 	@ManyToOne
 	private Category category;
+	
+	@ManyToOne
+	private FileDetails fileDetails;
 	
 	
 	

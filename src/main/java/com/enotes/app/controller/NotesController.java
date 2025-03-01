@@ -1,5 +1,6 @@
 package com.enotes.app.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.enotes.app.dto.NotesDto;
 import com.enotes.app.entity.exceptionhandler.ResourceNotFoundException;
@@ -27,16 +30,24 @@ public class NotesController {
 	@Autowired
 	private ICategoryRepo categoryRepo;
 
+//	@PostMapping("/save-notes")
+//	public ResponseEntity<?> saveNotes(@RequestBody NotesDto notesDto) throws ResourceNotFoundException{
+//		Boolean saveNotes = noteService.saveNotes(notesDto);
+//		return saveNotes
+//				? CommonUtil.createBuildResponseMessage(HttpStatus.CREATED, "Notes Saved Successfully")
+//				: CommonUtil.createErrorResponseMessage(HttpStatus.INTERNAL_SERVER_ERROR, "Notes not saved");
+//	}
+	
+	//used form-data from postman
 	@PostMapping("/save-notes")
-	public ResponseEntity<?> saveNotes(@RequestBody NotesDto notesDto) throws ResourceNotFoundException{
-		categoryRepo.findById(notesDto.getCategory().getId())
-		.orElseThrow(()->new ResourceNotFoundException("Invalid Category Id"));
-		
-		Boolean saveNotes = noteService.saveNotes(notesDto);
+	public ResponseEntity<?> saveNotes(@RequestParam String notes, 
+			@RequestParam(required=false) MultipartFile file) throws ResourceNotFoundException, IOException{
+		Boolean saveNotes = noteService.saveNotes(notes,file);
 		return saveNotes
 				? CommonUtil.createBuildResponseMessage(HttpStatus.CREATED, "Notes Saved Successfully")
 				: CommonUtil.createErrorResponseMessage(HttpStatus.INTERNAL_SERVER_ERROR, "Notes not saved");
 	}
+	
 	
 	@GetMapping("/getAllNotes")
 	public ResponseEntity<?> getAllNotes(){

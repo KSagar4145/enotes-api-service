@@ -20,11 +20,11 @@ import lombok.extern.slf4j.Slf4j;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 	
-//	@ExceptionHandler(Exception.class)
-//	public ResponseEntity<?> handleException(Exception e){
-//	log.error("Exception: "+ e.getMessage());
-//		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-//	}
+	@ExceptionHandler(Exception.class)
+	public ResponseEntity<?> handleException(Exception e){
+	log.error("Exception: "+ e.getMessage());
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+	}
 	
 	@ExceptionHandler(ResourceNotFoundException.class)
 	public ResponseEntity<?> handleResourceNotFoundException(Exception e){
@@ -32,7 +32,6 @@ public class GlobalExceptionHandler {
 		//return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
 		return CommonUtil.createErrorResponseMessage(HttpStatus.NOT_FOUND, e.getMessage());
 	}
-	
 	
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ResponseEntity<?> handleMethodArgumentNotValidException(MethodArgumentNotValidException e){
@@ -44,14 +43,11 @@ public class GlobalExceptionHandler {
 			String msg = err.getDefaultMessage();
 			String field = ((FieldError)(err)).getField();
 			errMap.put(field, msg);
-					
 		});
 		
 		//return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errMap);
 		return CommonUtil.createErrorResponse(HttpStatus.BAD_REQUEST, errMap);
-		
 	}
-	
 	
 	@ExceptionHandler(ExistsDataException.class)
 	public ResponseEntity<?> handleExistsDataException(ExistsDataException e){
