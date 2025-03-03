@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.enotes.app.dto.NotesDto;
+import com.enotes.app.dto.NotesResponse;
 import com.enotes.app.entity.FileDetails;
 import com.enotes.app.entity.exceptionhandler.ResourceNotFoundException;
 import com.enotes.app.repo.ICategoryRepo;
@@ -77,6 +78,20 @@ public class NotesController {
 		
 		return ResponseEntity.status(HttpStatus.OK).headers(headers).body(data);
 	} 
+	
+	//not used in Oracle Sql Devloper	
+//	@GetMapping("/user-notes")
+//	public ResponseEntity<?> getAllNotesByUser() {
+//	    Integer userId = 2;
+//	    NotesResponse notes = noteService.getAllNotesByUser(userId);
+////	    if (CollectionUtils.isEmpty(notes)) {
+////	        return ResponseEntity.noContent().build();
+////	    }
+////	    return CommonUtil.createBuildResponse(HttpStatus.OK,notes);
+//	    
+//	    return CommonUtil.createBuildResponse(HttpStatus.OK,notes);
+//	}
+
 	
 
 }

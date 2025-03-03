@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.enotes.app.dto.NotesDto;
+import com.enotes.app.dto.NotesResponse;
 import com.enotes.app.entity.FileDetails;
 import com.enotes.app.entity.exceptionhandler.ResourceNotFoundException;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -22,6 +23,8 @@ public interface INoteService {
 	public FileDetails getFileDetails(Integer fileDetailsId) throws ResourceNotFoundException;
 
 	public byte[] downloadFile(FileDetails fileDetails) throws ResourceNotFoundException, FileNotFoundException, IOException;
+
+//	public NotesResponse getAllNotesByUser(Integer userId);//not used in Oracle Sql Devloper
 
 
 	

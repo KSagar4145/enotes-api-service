@@ -16,6 +16,9 @@ import org.apache.commons.io.FilenameUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +27,7 @@ import org.springframework.util.StreamUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.enotes.app.dto.NotesDto;
+import com.enotes.app.dto.NotesResponse;
 import com.enotes.app.entity.FileDetails;
 import com.enotes.app.entity.Notes;
 import com.enotes.app.entity.exceptionhandler.ResourceNotFoundException;
@@ -161,6 +165,26 @@ public class NotesServiceImpl implements INoteService {
 		return StreamUtils.copyToByteArray(io);
 		
 	}
+
+	//not used in Oracle Sql Devloper
+//	@Override
+//	public NotesResponse getAllNotesByUser(Integer userId) {
+//		Pageable pageable = PageRequest.of(0, 5);
+//		Page<Notes> pageNotes = notesRepo.findByCreatedBy(userId, pageable);
+//
+//		List<NotesDto> notesDto = pageNotes.get().map(n -> mapper.map(n, NotesDto.class)).toList();
+//
+//		NotesResponse notesResponse = NotesResponse.builder()
+//		    .notes(notesDto)
+//		    .pageNo(pageNotes.getNumber())
+//		    .pageSize(pageNotes.getSize())
+//		    .totalElements(pageNotes.getTotalElements())
+//		    .totalPages(pageNotes.getTotalPages())
+//		    .isFirst(pageNotes.isFirst())
+//		    .isLast(pageNotes.isLast())
+//		    .build();
+//		return notesResponse;
+//	}
 
 
 	
