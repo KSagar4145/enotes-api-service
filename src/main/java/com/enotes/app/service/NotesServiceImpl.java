@@ -1,7 +1,9 @@
 package com.enotes.app.service;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -18,6 +20,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.enotes.app.dto.NotesDto;
@@ -89,7 +92,8 @@ public class NotesServiceImpl implements INoteService {
 			
 			String originalFilename = file.getOriginalFilename() ;
 			String extension = FilenameUtils.getExtension (originalFilename) ;
-			List<String> extensionAllow =Arrays.asList(".pdf",".xlsx", ".xml",".jpg", ".png");
+			System.out.println(">>>>>>>>>>extension: "+extension+" >>>>>>>>>originalFilename: "+originalFilename);
+			List<String> extensionAllow =Arrays.asList("pdf","xlsx", "xml","jpg", "png");
 			if (!extensionAllow. contains(extension)) {
 				throw new IllegalArgumentException ("invalid file format ! Upload only .pdf, .xlsx, .xml, .jpg, .png");
 			}
@@ -140,6 +144,26 @@ public class NotesServiceImpl implements INoteService {
 		List<NotesDto> noteList = notesRepo.findAll().stream().map(note->mapper.map(note, NotesDto.class)).collect(Collectors.toList());
 		return noteList;
 	}
+	
+	
+	@Override
+	public FileDetails getFileDetails(Integer fileDetailsId) throws ResourceNotFoundException {
+		FileDetails fileDetails = fileRepo.findById(fileDetailsId).orElseThrow(()->new ResourceNotFoundException("Invalid File Details Id, File is not available"));
+		return fileDetails;
+	}
+
+
+	@Override
+	public byte[] downloadFile(FileDetails fileDetails) throws ResourceNotFoundException, IOException {
+		
+		InputStream io = new FileInputStream(fileDetails.getPath());
+		
+		return StreamUtils.copyToByteArray(io);
+		
+	}
+
+
+	
 
 
 
