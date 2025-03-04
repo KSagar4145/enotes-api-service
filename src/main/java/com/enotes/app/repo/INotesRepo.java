@@ -16,9 +16,17 @@ public interface INotesRepo extends JpaRepository<Notes, Integer> {
 
 	List<NotesDto> findByCreatedBy(Integer userId);
 
-//	Page<Notes> findByCreatedBy(Integer userId, Pageable  pageable);//not used in Oracle Sql Devloper
+	Page<Notes> findByCreatedBy(Integer userId, Pageable  pageable);//not used in Oracle Sql Devloper
+
+	List<Notes> findByCreatedByAndIsDeletedTrue(Integer userId);
 	
 
 
+	
+
+//
+//	Page<Notes> findByCreatedByAndIsDeletedFalse(Integer userId, Pageable pageable);
+//
+//	List<Notes> findAllByIsDeletedAndDeletedOnBefore(boolean b, LocalDateTime cutOffDate);
 
 }

@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.enotes.app.dto.FavouriteNoteDto;
 import com.enotes.app.dto.NotesDto;
 import com.enotes.app.dto.NotesResponse;
 import com.enotes.app.entity.FileDetails;
@@ -92,6 +94,75 @@ public class NotesController {
 //	    return CommonUtil.createBuildResponse(HttpStatus.OK,notes);
 //	}
 
+	
+	@DeleteMapping("/delete-notes/{notesId}")
+	public ResponseEntity<?> deleteNotes(@PathVariable Integer notesId) throws ResourceNotFoundException{
+		noteService.softDeleteNotes(notesId);
+		return CommonUtil.createBuildResponseMessage(HttpStatus.OK, "Notes Deleted Successfully");
+	}
+	
+	@GetMapping("/restore/{id}")
+	public ResponseEntity<?> restoreNotes(@PathVariable Integer id) throws Exception {
+		noteService.restoreNotes(id);
+		return CommonUtil.createBuildResponseMessage( HttpStatus.OK,"Notes restore Success");
+	}
+	
+	
+	@GetMapping("/recycle-bin")
+	public ResponseEntity<?> getUserRecycleBinNotes() throws Exception {
+		Integer userId = 2;
+		List<NotesDto> notes = noteService.getUserRecycleBinNotes(userId);
+		if (CollectionUtils.isEmpty(notes)) {
+			return CommonUtil.createBuildResponseMessage(HttpStatus.OK,"Notes not avaible in Recycle Bin");
+		}
+		return CommonUtil.createBuildResponse(HttpStatus.OK, notes);
+	}
+	
+	
+	@DeleteMapping("/delete/{id}")
+	public ResponseEntity<?> hardDeleteNotes(@PathVariable Integer id) throws Exception {
+		noteService.hardDeleteNotes(id);
+		return CommonUtil.createBuildResponseMessage(HttpStatus.OK, "Delete Success");
+	}
+
+	@DeleteMapping("/delete")
+	public ResponseEntity<?> emptyRecyleBin() throws Exception {
+		int userId = 2;
+		noteService.emptyRecycleBin(userId);
+		return CommonUtil.createBuildResponseMessage(HttpStatus.OK, "Delete Success");
+	}
+
+	@PostMapping("/fav/{noteId}")
+	public ResponseEntity<?> favoriteNote(@PathVariable Integer noteId) throws Exception {
+		noteService.favoriteNotes(noteId);
+		return CommonUtil.createBuildResponseMessage(HttpStatus.CREATED, "Notes added Favorite");
+	}
+
+	@DeleteMapping("/un-fav/{favNotId}")
+	public ResponseEntity<?> unFavoriteNote(@PathVariable Integer favNotId) throws Exception {
+		noteService.unFavoriteNotes(favNotId);
+		return CommonUtil.createBuildResponseMessage( HttpStatus.OK, "Remove Favorite");
+	}
+
+	@GetMapping("/fav-note")
+	public ResponseEntity<?> getUserfavoriteNote() throws Exception {
+
+		List<FavouriteNoteDto> userFavoriteNotes = noteService.getUserFavoriteNotes();
+		if (CollectionUtils.isEmpty(userFavoriteNotes)) {
+			return ResponseEntity.noContent().build();
+		}
+		return CommonUtil.createBuildResponse(HttpStatus.OK, userFavoriteNotes);
+	}
+
+	@GetMapping("/copy/{id}")
+	public ResponseEntity<?> copyNotes(@PathVariable Integer id) throws Exception {
+		Boolean copyNotes = noteService.copyNotes(id);
+		if (copyNotes) {
+			return CommonUtil.createBuildResponseMessage(HttpStatus.CREATED, "Copied success");
+		}
+		return CommonUtil.createErrorResponseMessage(HttpStatus.INTERNAL_SERVER_ERROR, "Copy failed ! Try Again");
+	}
+	
 	
 
 }

@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.enotes.app.dto.FavouriteNoteDto;
 import com.enotes.app.dto.NotesDto;
 import com.enotes.app.dto.NotesResponse;
 import com.enotes.app.entity.FileDetails;
@@ -24,9 +25,25 @@ public interface INoteService {
 
 	public byte[] downloadFile(FileDetails fileDetails) throws ResourceNotFoundException, FileNotFoundException, IOException;
 
-//	public NotesResponse getAllNotesByUser(Integer userId);//not used in Oracle Sql Devloper
+	public void softDeleteNotes(Integer notesId) throws ResourceNotFoundException;
 
+	public NotesResponse getAllNotesByUser(Integer userId);//not used in Oracle Sql Devloper
 
+	public void restoreNotes(Integer id) throws Exception;
+
+	public List<NotesDto> getUserRecycleBinNotes(Integer userId);
+
+	public void hardDeleteNotes(Integer id) throws Exception;
+
+	public void emptyRecycleBin(int userId);
+
+	public void favoriteNotes(Integer noteId) throws Exception;
+
+	public void unFavoriteNotes(Integer noteId) throws Exception;
+
+	public List<FavouriteNoteDto> getUserFavoriteNotes() throws Exception;
+
+	public Boolean copyNotes(Integer id) throws Exception;
 	
 
 }
